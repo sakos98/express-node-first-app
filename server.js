@@ -32,6 +32,7 @@ app.get('/hello/:name', (req, res) => {
 });
 
 
+
 app.use(express.static(path.join(__dirname, '/public')));
 
 app.get('/', (req, res) => {
