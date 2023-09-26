@@ -1,70 +1,25 @@
 const express = require('express');
 const router = express.Router();
-const { v4: uuidv4 } = require('uuid');
-const db = require('../db');
+
+const ConcertsController = require('../controllers/concert.controller');
 
 //show all concerts (GET)
-router.route('/concerts').get((req, res) => {
-    res.json(db.concerts);
-});
+router.get('/concerts', ConcertsController.getAll);
 
 //show only one concert (GET)
-router.route('/concerts/:id').get((req, res) => {
-    const { id } = req.params;
-    const concert = db.concerts.find((item) => item.id.toString() === id);
-    if(concert) {
-        res.json(concert);
-    } else {
-        res.status(404).json({ message: 'Concert not found'});
-    }
-});
+router.get('/concerts/:id', ConcertsController.getConcertID);
+
+//show random concert (GET)
+router.get('/concerts/random', ConcertsController.getRandom);
 
 //add concert (POST)
-router.route('/concerts').post((req, res) => {
-    const { performer, genre, price, day, image} = req.body;
-    if (performer && genre && price && day && image) {
-        const newConcert = {
-            id: uuidv4(),
-            performer,
-            genre,
-            price,
-            day,
-            image,
-        };
-        db.concerts.push(newConcert);
-        res.json({ message: 'OK'});
-    } else {
-        res.status(400).json({ message: 'Bad Request - all fields required' });
-    }
-});
+router.post('/concerts', ConcertsController.addConcert);
 
 //modyfi concert (PUT)
-router.route('/concerts/:id').put((req, res) => {
-    const { id } = req.params;
-    const { performer, genre, price, day, image } = req.body;
-
-    const concertIndex = db.concerts.findIndex((item) => item.id.toString() === id);
-
-    if(concertIndex !== -1 && performer && genre && price && day && image) {
-        db.concerts[concertIndex] = { ...db.concerts[concertIndex], performer, genre, price, day, image};
-        res.json({ message: 'OK' })
-    } else {
-        res.status(404).json({ message: 'Concert not found or missing data'});
-    }
-});
+router.put('/concerts/:id', ConcertsController.modyfiConcert);
 
 //delete concert (DELETE)
-router.route('/concerts/:id').delete((req, res) => {
-    const { id } = req.params;
-    const concertIndex = db.concerts.findIndex((item) => item.id.toString() === id);
-
-    if(concertIndex !== -1) {
-        db.concerts.splice(concertIndex, 1);
-        res.json({ message: 'OK' });
-    } else {
-        res.status(404).json({ message: 'Concert not found' });
-    }
-});
+router.delete('/concerts/:id', ConcertsController.deleteConcert);
 
 
 module.exports = router;
