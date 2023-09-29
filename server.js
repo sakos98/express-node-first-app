@@ -46,7 +46,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '/client/build/index.html'));
 });
 
-mongoose.connect('mongodb://0.0.0.0:27017/NewWaveDB', { useNewUrlParser: true });
+mongoose.connect('mongodb+srv://michusakowicz:zlqJy1FtA0WnR5hK@cluster0.fneaa88.mongodb.net/NewWaveDB?retryWrites=true&w=majority&appName=AtlasApp', { useNewUrlParser: true });
 const db = mongoose.connection;
 
 db.once('open', () => {
