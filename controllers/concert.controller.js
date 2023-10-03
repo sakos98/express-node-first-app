@@ -9,6 +9,50 @@ exports.getAll = async (req, res) => {
   }
 }
 
+// Wyszukiwanie koncertów według artysty
+exports.findByPerformer = async (req, res) => {
+  try {
+    const { performer } = req.params;
+    const concerts = await Concerts.find({ performer });
+    res.json(concerts);
+  } catch (err) {
+    res.status(500).json({ message: err });
+  }
+};
+
+// Wyszukiwanie koncertów według gatunku
+exports.findByGenre = async (req, res) => {
+  try {
+    const { genre } = req.params;
+    const concerts = await Concerts.find({ genre });
+    res.json(concerts);
+  } catch (err) {
+    res.status(500).json({ message: err });
+  }
+};
+
+// Wyszukiwanie koncertów według ceny w przedziale
+exports.findByPriceRange = async (req, res) => {
+  try {
+    const { price_min, price_max } = req.params;
+    const concerts = await Concerts.find({ price: { $gte: price_min, $lte: price_max } });
+    res.json(concerts);
+  } catch (err) {
+    res.status(500).json({ message: err });
+  }
+};
+
+// Wyszukiwanie koncertów według dnia
+exports.findByDay = async (req, res) => {
+  try {
+    const { day } = req.params;
+    const concerts = await Concerts.find({ day });
+    res.json(concerts);
+  } catch (err) {
+    res.status(500).json({ message: err });
+  }
+};
+
 exports.getConcertID = async (req, res) => {
   try {
     const concert = await Concerts.findById(req.params.id);
